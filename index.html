@@ -100,7 +100,7 @@
     </div>
 
     <button onclick="openDayEventModal()" class="text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg border border-indigo-200/80 flex items-center gap-1 transition cursor-pointer">
-      <i class="ph ph-calendar-plus font-bold"></i> Set Event Hari Ini
+      <i class="ph ph-calendar-plus font-bold"></i> Set Event & Waktu Jumpa
     </button>
   </div>
 
@@ -113,7 +113,7 @@
       <!-- Tab Pemilihan Hari -->
       <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-2" id="mobile-day-tabs"></div>
 
-      <!-- Banner Event Hari Jika Ada -->
+      <!-- Banner Event Hari & Waktu Jumpa Jika Ada -->
       <div id="day-event-banner" class="hidden mb-3"></div>
 
       <!-- Kad Waktu bagi Hari Terpilih -->
@@ -165,7 +165,7 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- MODAL: SET ACARA / EVENT HARI -->
+  <!-- MODAL: SET ACARA / EVENT HARI & WAKTU JUMPA -->
   <!-- ============================================== -->
   <div id="event-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs hidden flex items-end sm:items-center justify-center z-50">
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 relative border border-slate-100">
@@ -174,7 +174,7 @@
       <div class="flex items-center justify-between mb-4">
         <div>
           <h3 class="text-base font-black text-slate-900 flex items-center gap-1.5">
-            📌 Tetapkan Event Hari Terpilih
+            📌 Tetapkan Event & Waktu Jumpa
           </h3>
           <p id="event-modal-day-label" class="text-xs text-indigo-600 font-bold mt-0.5"></p>
         </div>
@@ -184,12 +184,23 @@
       </div>
 
       <div class="space-y-3">
+        <!-- Nama Acara -->
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">Nama Acara / Event</label>
           <input type="text" id="event-input-title" placeholder="Contoh: Usrah Mingguan / Iftar / Kembara" 
                  class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
         </div>
 
+        <!-- WAKTU BERKUMPUL / BERJUMPA -->
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+            <i class="ph ph-clock font-bold text-indigo-600"></i> Waktu Berkumpul / Berjumpa
+          </label>
+          <input type="text" id="event-input-time" placeholder="Contoh: 8:30 Malam / Selepas Isyak / 5.00 PM" 
+                 class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+        </div>
+
+        <!-- Tema Warna -->
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">Warna / Tema Acara</label>
           <div class="grid grid-cols-4 gap-2 text-xs font-bold text-center">
@@ -222,7 +233,7 @@
 
         <div class="flex gap-2 pt-2">
           <button onclick="saveDayEvent()" class="flex-1 py-2.5 bg-indigo-600 active:bg-indigo-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-xs">
-            💾 Simpan Event
+            💾 Simpan Event & Masa
           </button>
           <button onclick="deleteDayEvent()" class="px-3 py-2.5 bg-rose-50 text-rose-600 active:bg-rose-100 font-bold rounded-xl text-xs transition border border-rose-200 cursor-pointer">
             Padam
@@ -412,7 +423,7 @@
 
         tabsHTML += `
           <button onclick="window.selectMobileDay(${idx})" 
-                  class="flex-shrink-0 flex flex-col items-center py-2 px-3 rounded-2xl border transition text-center cursor-pointer min-w-[70px] ${activeStyle}">
+                  class="flex-shrink-0 flex flex-col items-center py-2 px-3 rounded-2xl border transition text-center cursor-pointer min-w-[72px] ${activeStyle}">
             <span class="text-[10px] uppercase font-extrabold ${isSelected ? 'text-indigo-200' : 'text-slate-400'}">${day.dayName}</span>
             <span class="text-xs font-black mt-0.5">${day.shortDate}</span>
             
@@ -426,7 +437,7 @@
       });
       tabsContainer.innerHTML = tabsHTML;
 
-      // Banner Event untuk Hari ini
+      // Banner Event & Waktu Jumpa untuk Hari ini
       const currentDay = weekDays[selectedDayIndex];
       const banner = document.getElementById("day-event-banner");
       const currentDayEvent = dayEventsData[currentDay.dateStr];
@@ -435,14 +446,21 @@
         const theme = COLOR_SCHEMES[currentDayEvent.color || 'purple'];
         banner.className = `p-3 rounded-2xl border flex items-center justify-between gap-2 shadow-xs mb-3 ${theme.banner}`;
         banner.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-lg">📌</span>
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">📌</span>
             <div>
               <div class="text-[10px] uppercase tracking-wider font-extrabold opacity-90">Acara Khas: ${currentDay.dayName} (${currentDay.shortDate})</div>
-              <div class="text-sm font-black">${currentDayEvent.title}</div>
+              <div class="text-sm font-black flex items-center gap-2 flex-wrap">
+                <span>${currentDayEvent.title}</span>
+                ${currentDayEvent.meetTime ? `
+                  <span class="bg-white/25 text-white text-[11px] px-2 py-0.5 rounded-md font-extrabold flex items-center gap-1">
+                    ⏰ ${currentDayEvent.meetTime}
+                  </span>
+                ` : ''}
+              </div>
             </div>
           </div>
-          <button onclick="window.openDayEventModal()" class="text-[11px] font-black bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-xl cursor-pointer">
+          <button onclick="window.openDayEventModal()" class="text-[11px] font-black bg-white/20 hover:bg-white/30 px-2.5 py-1.5 rounded-xl cursor-pointer">
             Edit
           </button>
         `;
@@ -461,7 +479,6 @@
         const result = calculateSlotStatus(slotInfo);
         const notesObj = slotInfo.notes || {};
 
-        // Ambil senarai yang ada catatan
         const notedMembers = MEMBERS.filter(m => notesObj[m.id] && notesObj[m.id].trim() !== "");
 
         let borderClass = "border-slate-200 bg-white";
@@ -557,9 +574,14 @@
         const dayEvent = dayEventsData[day.dateStr];
         headerHTML += `
           <div class="p-2 flex flex-col items-center justify-center relative ${day.isToday ? 'bg-indigo-50/80 text-indigo-950 font-extrabold' : ''}">
-            ${dayEvent ? `<span class="text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full mb-1 text-center truncate max-w-[85px] ${COLOR_SCHEMES[dayEvent.color || 'purple'].badge}">📌 ${dayEvent.title}</span>` : ''}
+            ${dayEvent ? `
+              <span class="text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full mb-1 text-center truncate max-w-[85px] ${COLOR_SCHEMES[dayEvent.color || 'purple'].badge}" title="${dayEvent.title} ${dayEvent.meetTime ? '(' + dayEvent.meetTime + ')' : ''}">
+                📌 ${dayEvent.title}
+              </span>
+            ` : ''}
             <span class="text-xs uppercase tracking-wider ${day.isWeekend ? 'text-indigo-600 font-black' : 'text-slate-700'}">${day.dayName}</span>
             <span class="text-[11px] font-medium text-slate-400">${day.shortDate}</span>
+            ${dayEvent && dayEvent.meetTime ? `<span class="text-[8px] font-black text-indigo-700 mt-0.5">⏰ ${dayEvent.meetTime}</span>` : ''}
           </div>
         `;
       });
@@ -757,7 +779,7 @@
     };
 
     // ==========================================
-    // MODAL: EVENT HARI
+    // MODAL: EVENT HARI & WAKTU JUMPA
     // ==========================================
     window.openDayEventModal = function() {
       const currentDay = weekDays[selectedDayIndex];
@@ -765,6 +787,7 @@
       
       const existing = dayEventsData[currentDay.dateStr] || {};
       document.getElementById("event-input-title").value = existing.title || "";
+      document.getElementById("event-input-time").value = existing.meetTime || "";
       
       const radios = document.getElementsByName("event-color");
       radios.forEach(r => {
@@ -781,6 +804,7 @@
     window.saveDayEvent = async function() {
       const currentDay = weekDays[selectedDayIndex];
       const title = document.getElementById("event-input-title").value.trim();
+      const meetTime = document.getElementById("event-input-time").value.trim();
       const color = document.querySelector('input[name="event-color"]:checked')?.value || "purple";
 
       if (!title) {
@@ -792,6 +816,7 @@
         const eventRef = ref(db, `day_events/${currentDay.dateStr}`);
         await set(eventRef, {
           title: title,
+          meetTime: meetTime,
           color: color,
           updatedAt: new Date().toISOString()
         });
@@ -822,13 +847,15 @@
       let text = `🌸 *SLOT IN WITH MUROBBI - JADUAL HALAQAH* 🌸\n`;
       text += `🗓 *Minggu:* ${first.shortDate} – ${last.shortDate}\n\n`;
 
-      // 1. Acara Khas Minggu Ini
+      // 1. Acara Khas & Waktu Berkumpul Minggu Ini
       let hasEvents = false;
-      let eventText = `📌 *ACARA / EVENT KHAS:*\n`;
+      let eventText = `📌 *AGENDA & WAKTU BERKUMPUL:*\n`;
       weekDays.forEach(d => {
-        if (dayEventsData[d.dateStr]) {
+        const ev = dayEventsData[d.dateStr];
+        if (ev) {
           hasEvents = true;
-          eventText += `• *${d.dayName} (${d.shortDate}):* ${dayEventsData[d.dateStr].title}\n`;
+          const timeDetails = ev.meetTime ? ` (⏰ *Berkumpul:* ${ev.meetTime})` : '';
+          eventText += `• *${d.dayName} (${d.shortDate}):* ${ev.title}${timeDetails}\n`;
         }
       });
       if (hasEvents) {
@@ -856,7 +883,7 @@
       });
 
       if (availableCount === 0) {
-        text += `_(Tiada slot 100% lapang minggu ini, periksa slot kuning di sistem)_\n`;
+        text += `_(Tiada slot 100% lapang minggu ini, sila rujuk sistem untuk slot separuh free)_\n`;
       }
 
       // 3. Catatan Individu
@@ -891,14 +918,12 @@
     // REALTIME DATABASE LISTENER
     // ==========================================
     function listenToDatabase() {
-      // Dengar jadual slot & nota
       const scheduleRef = ref(db, "weekly_schedule");
       onValue(scheduleRef, (snapshot) => {
         scheduleData = snapshot.val() || {};
         refreshUI();
       });
 
-      // Dengar acara/event harian
       const eventsRef = ref(db, "day_events");
       onValue(eventsRef, (snapshot) => {
         dayEventsData = snapshot.val() || {};
@@ -913,7 +938,6 @@
         renderCalendarGrid();
       }
 
-      // Kemaskini modal jika sedang dibuka
       if (activeSlotKey && !document.getElementById("detail-modal").classList.contains("hidden")) {
         window.openDetail(
           activeSlotKey, 
