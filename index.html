@@ -11,7 +11,6 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <style>
-    /* Halang overscroll & lancarkan paparan telefon */
     body {
       -webkit-tap-highlight-color: transparent;
     }
@@ -27,46 +26,53 @@
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen pb-12 antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-16 antialiased selection:bg-indigo-500 selection:text-white">
 
-  <!-- Header Utama (Mesra Mobile) -->
-  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 py-3 md:py-4">
+  <!-- Header Utama -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-3 sm:px-4 py-2.5 sm:py-3">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
       <div>
-        <div class="flex items-center gap-2">
-          <span class="text-2xl">📖</span>
-          <h1 class="text-lg md:text-2xl font-black tracking-tight text-slate-900">
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <span class="text-xl sm:text-2xl">📖</span>
+          <h1 class="text-base sm:text-xl font-black tracking-tight text-slate-900">
             Slot in with Murobbi
           </h1>
           <span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase">Live</span>
         </div>
-        <p class="text-[11px] md:text-xs text-slate-500 font-medium truncate max-w-[260px] md:max-w-none">
+        <p class="text-[10px] sm:text-xs text-slate-500 font-medium truncate max-w-[210px] sm:max-w-none">
           👑 Kak Nisa • Nabila • Fir • Farasya • Athirah • Sakinah
         </p>
       </div>
 
-      <!-- Pilihan Paparan (Telefon / Jadual) -->
-      <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
-        <button onclick="setViewMode('mobile')" id="btn-view-mobile" class="px-2.5 py-1 text-xs font-bold rounded-lg transition bg-white text-indigo-700 shadow-xs">
-          📱 Kad
+      <!-- WhatsApp Share & View Toggles -->
+      <div class="flex items-center gap-1.5">
+        <button onclick="shareToWhatsApp()" class="h-8 px-2.5 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer" title="Kongsi Jadual ke WhatsApp">
+          <i class="ph ph-whatsapp-logo text-base"></i>
+          <span class="hidden sm:inline">WhatsApp</span>
         </button>
-        <button onclick="setViewMode('grid')" id="btn-view-grid" class="px-2.5 py-1 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900">
-          📊 Jadual
-        </button>
+
+        <div class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+          <button onclick="setViewMode('mobile')" id="btn-view-mobile" class="px-2 py-1 text-xs font-bold rounded-lg transition bg-white text-indigo-700 shadow-xs">
+            📱 Kad
+          </button>
+          <button onclick="setViewMode('grid')" id="btn-view-grid" class="px-2 py-1 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900">
+            📊 Jadual
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Bar Navigasi Minggu -->
     <div class="max-w-6xl mx-auto mt-2 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
       <div class="flex items-center gap-1">
-        <button onclick="changeWeek(-1)" class="h-8 px-2.5 bg-slate-100 active:bg-slate-200 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-1 transition cursor-pointer">
+        <button onclick="changeWeek(-1)" class="h-7 sm:h-8 px-2 bg-slate-100 active:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-0.5 transition cursor-pointer">
           <i class="ph ph-caret-left font-bold"></i>
           <span class="hidden sm:inline">Lepas</span>
         </button>
-        <button onclick="resetToThisWeek()" class="h-8 px-2.5 bg-indigo-50 active:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-black border border-indigo-200/60 transition cursor-pointer">
+        <button onclick="resetToThisWeek()" class="h-7 sm:h-8 px-2.5 bg-indigo-50 active:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-black border border-indigo-200/60 transition cursor-pointer">
           ✨ Minggu Ini
         </button>
-        <button onclick="changeWeek(1)" class="h-8 px-2.5 bg-slate-100 active:bg-slate-200 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-1 transition cursor-pointer">
+        <button onclick="changeWeek(1)" class="h-7 sm:h-8 px-2 bg-slate-100 active:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-0.5 transition cursor-pointer">
           <span class="hidden sm:inline">Depan</span>
           <i class="ph ph-caret-right font-bold"></i>
         </button>
@@ -79,80 +85,149 @@
     </div>
   </header>
 
-  <!-- Legend Status -->
-  <div class="max-w-6xl mx-auto px-4 mt-3 flex flex-wrap items-center justify-center sm:justify-start gap-2 text-[11px] font-bold text-slate-600">
-    <span class="flex items-center gap-1 bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
-      🟢 Available
-    </span>
-    <span class="flex items-center gap-1 bg-amber-50 text-amber-800 px-2 py-0.5 rounded-md border border-amber-200">
-      🟡 Partial Free
-    </span>
-    <span class="flex items-center gap-1 bg-rose-50 text-rose-700 px-2 py-0.5 rounded-md border border-rose-200">
-      🔴 Occupied
-    </span>
+  <!-- Legend Status & Tambah Event -->
+  <div class="max-w-6xl mx-auto px-3 sm:px-4 mt-2.5 flex flex-wrap items-center justify-between gap-2">
+    <div class="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-slate-600">
+      <span class="flex items-center gap-1 bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
+        🟢 Available (Semua Free)
+      </span>
+      <span class="flex items-center gap-1 bg-amber-50 text-amber-800 px-2 py-0.5 rounded-md border border-amber-200">
+        🟡 Separa Free
+      </span>
+      <span class="flex items-center gap-1 bg-rose-50 text-rose-700 px-2 py-0.5 rounded-md border border-rose-200">
+        🔴 Occupied
+      </span>
+    </div>
+
+    <button onclick="openDayEventModal()" class="text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg border border-indigo-200/80 flex items-center gap-1 transition cursor-pointer">
+      <i class="ph ph-calendar-plus font-bold"></i> Set Event Hari Ini
+    </button>
   </div>
 
-  <main class="max-w-6xl mx-auto px-3 md:px-4 mt-3">
+  <main class="max-w-6xl mx-auto px-3 md:px-4 mt-2">
 
     <!-- ============================================== -->
-    <!-- 1. PAPARAN TELEFON (MOBILE VIEW - DAY TABS & CARDS) -->
+    <!-- 1. PAPARAN TELEFON (MOBILE VIEW) -->
     <!-- ============================================== -->
     <section id="mobile-view-container">
-      <!-- Tab Pemilihan Hari (Swipeable di Telefon) -->
-      <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-2 mb-2" id="mobile-day-tabs">
-        <!-- Injected via JavaScript -->
-      </div>
+      <!-- Tab Pemilihan Hari -->
+      <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-2" id="mobile-day-tabs"></div>
 
-      <!-- Kad-Kad Waktu bagi Hari Terpilih -->
-      <div class="space-y-2.5" id="mobile-slots-container">
-        <!-- Injected via JavaScript -->
-      </div>
+      <!-- Banner Event Hari Jika Ada -->
+      <div id="day-event-banner" class="hidden mb-3"></div>
+
+      <!-- Kad Waktu bagi Hari Terpilih -->
+      <div class="space-y-2" id="mobile-slots-container"></div>
     </section>
 
     <!-- ============================================== -->
     <!-- 2. PAPARAN JADUAL PENUH (GRID VIEW) -->
     <!-- ============================================== -->
     <section id="grid-view-container" class="hidden overflow-x-auto pb-6">
-      <div class="min-w-[800px] bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
-        <div id="grid-header" class="grid grid-cols-8 border-b border-slate-200 bg-slate-50/90 text-center text-xs font-extrabold text-slate-600 divide-x divide-slate-200">
-        </div>
-        <div id="calendar-body" class="divide-y divide-slate-100">
-        </div>
+      <div class="min-w-[850px] bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+        <div id="grid-header" class="grid grid-cols-8 border-b border-slate-200 bg-slate-50/90 text-center text-xs font-extrabold text-slate-600 divide-x divide-slate-200"></div>
+        <div id="calendar-body" class="divide-y divide-slate-100"></div>
       </div>
     </section>
 
   </main>
 
   <!-- ============================================== -->
-  <!-- MODAL / BOTTOM SHEET UNTUK TOGGLE STATUS -->
+  <!-- MODAL: TOGGLE STATUS & NOTA INDIVIDU -->
   <!-- ============================================== -->
   <div id="detail-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs hidden flex items-end sm:items-center justify-center z-50 transition-opacity">
-    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 sm:p-6 relative border border-slate-100 max-h-[85vh] flex flex-col animate-in slide-in-from-bottom-5 duration-150">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 relative border border-slate-100 max-h-[90vh] flex flex-col animate-in slide-in-from-bottom-5 duration-150">
       
-      <!-- Pemegang Mobile (Handle bar) -->
       <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-3 sm:hidden"></div>
 
       <!-- Header Modal -->
-      <div class="flex items-start justify-between mb-4">
+      <div class="flex items-start justify-between mb-3">
         <div>
-          <span id="modal-date-badge" class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-md"></span>
-          <h3 id="modal-title" class="text-lg font-black text-slate-900 mt-1.5 flex items-center gap-1.5"></h3>
-          <p class="text-[11px] text-slate-500">Tekan suis untuk tukar status anda.</p>
+          <span id="modal-date-badge" class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-md"></span>
+          <h3 id="modal-title" class="text-base sm:text-lg font-black text-slate-900 mt-1 flex items-center gap-1.5"></h3>
+          <p class="text-[11px] text-slate-500">Tukar status & tulis nota aktiviti anda.</p>
         </div>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 bg-slate-100 p-2 rounded-full cursor-pointer">
           <i class="ph ph-x font-bold text-base"></i>
         </button>
       </div>
 
-      <!-- Senarai Ahli Halaqah -->
-      <div id="member-list" class="space-y-2 overflow-y-auto pr-1 flex-1 py-1">
-      </div>
+      <!-- Senarai Ahli Halaqah & Nota -->
+      <div id="member-list" class="space-y-2.5 overflow-y-auto pr-1 flex-1 py-1"></div>
 
       <!-- Butang Selesai -->
-      <div class="pt-3 mt-3 border-t border-slate-100">
-        <button onclick="closeModal()" class="w-full py-3 bg-slate-900 active:bg-slate-800 text-white font-extrabold rounded-xl text-sm transition shadow-sm cursor-pointer">
-          ✨ Selesai & Simpan
+      <div class="pt-3 mt-2 border-t border-slate-100">
+        <button onclick="closeModal()" class="w-full py-2.5 bg-slate-900 active:bg-slate-800 text-white font-extrabold rounded-xl text-sm transition shadow-sm cursor-pointer">
+          ✨ Selesai
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: SET ACARA / EVENT HARI -->
+  <!-- ============================================== -->
+  <div id="event-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs hidden flex items-end sm:items-center justify-center z-50">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 relative border border-slate-100">
+      <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-3 sm:hidden"></div>
+      
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-base font-black text-slate-900 flex items-center gap-1.5">
+            📌 Tetapkan Event Hari Terpilih
+          </h3>
+          <p id="event-modal-day-label" class="text-xs text-indigo-600 font-bold mt-0.5"></p>
+        </div>
+        <button onclick="closeEventModal()" class="text-slate-400 hover:text-slate-700 bg-slate-100 p-1.5 rounded-full cursor-pointer">
+          <i class="ph ph-x font-bold text-sm"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Nama Acara / Event</label>
+          <input type="text" id="event-input-title" placeholder="Contoh: Usrah Mingguan / Iftar / Kembara" 
+                 class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Warna / Tema Acara</label>
+          <div class="grid grid-cols-4 gap-2 text-xs font-bold text-center">
+            <label class="cursor-pointer">
+              <input type="radio" name="event-color" value="purple" checked class="peer sr-only">
+              <div class="p-2 rounded-xl border border-purple-200 bg-purple-50 text-purple-800 peer-checked:ring-2 peer-checked:ring-purple-600 peer-checked:bg-purple-100">
+                💜 Usrah
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="event-color" value="amber" class="peer sr-only">
+              <div class="p-2 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 peer-checked:ring-2 peer-checked:ring-amber-600 peer-checked:bg-amber-100">
+                ⭐ Program
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="event-color" value="emerald" class="peer sr-only">
+              <div class="p-2 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 peer-checked:ring-2 peer-checked:ring-emerald-600 peer-checked:bg-emerald-100">
+                🍃 Santai
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="event-color" value="rose" class="peer sr-only">
+              <div class="p-2 rounded-xl border border-rose-200 bg-rose-50 text-rose-800 peer-checked:ring-2 peer-checked:ring-rose-600 peer-checked:bg-rose-100">
+                🚨 Penting
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button onclick="saveDayEvent()" class="flex-1 py-2.5 bg-indigo-600 active:bg-indigo-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-xs">
+            💾 Simpan Event
+          </button>
+          <button onclick="deleteDayEvent()" class="px-3 py-2.5 bg-rose-50 text-rose-600 active:bg-rose-100 font-bold rounded-xl text-xs transition border border-rose-200 cursor-pointer">
+            Padam
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -160,7 +235,7 @@
   <!-- Firebase Modular SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyC-W8y02kRr2yOA2QANhEXy6xojbXJxsP4",
@@ -176,7 +251,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Senarai Ahli
+    // Senarai Ahli Halaqah
     const MEMBERS = [
       { id: "kak_nisa", name: "Kak Nisa", isMurobbi: true, emoji: "👑", role: "Murobbi" },
       { id: "nabila", name: "Nabila", isMurobbi: false, emoji: "🌸", role: "Ahli" },
@@ -186,7 +261,7 @@
       { id: "sakinah", name: "Sakinah", isMurobbi: false, emoji: "🍃", role: "Ahli" },
     ];
 
-    // Pecahan Waktu (Tanpa set jam, ditambah waktu Qiam)
+    // Pecahan Waktu
     const SLOTS = [
       { id: "qiam", label: "Qiam", emoji: "🌌" },
       { id: "pagi", label: "Pagi", emoji: "🌅" },
@@ -195,11 +270,35 @@
       { id: "malam", label: "Malam", emoji: "🌙" }
     ];
 
+    const COLOR_SCHEMES = {
+      purple: {
+        tabBg: "border-purple-300 bg-purple-50 text-purple-900",
+        badge: "bg-purple-100 text-purple-800 border border-purple-300",
+        banner: "bg-purple-600 text-white border-purple-700"
+      },
+      amber: {
+        tabBg: "border-amber-300 bg-amber-50 text-amber-900",
+        badge: "bg-amber-100 text-amber-800 border border-amber-300",
+        banner: "bg-amber-500 text-white border-amber-600"
+      },
+      emerald: {
+        tabBg: "border-emerald-300 bg-emerald-50 text-emerald-900",
+        badge: "bg-emerald-100 text-emerald-800 border border-emerald-300",
+        banner: "bg-emerald-600 text-white border-emerald-700"
+      },
+      rose: {
+        tabBg: "border-rose-300 bg-rose-50 text-rose-900",
+        badge: "bg-rose-100 text-rose-800 border border-rose-300",
+        banner: "bg-rose-600 text-white border-rose-700"
+      }
+    };
+
     let currentWeekOffset = 0;
     let weekDays = [];
-    let selectedDayIndex = 0; // Untuk paparan mobile
-    let viewMode = 'mobile'; // 'mobile' atau 'grid'
+    let selectedDayIndex = 0;
+    let viewMode = 'mobile';
     let scheduleData = {};
+    let dayEventsData = {};
     let activeSlotKey = null;
     let activeSlotMeta = null;
 
@@ -250,7 +349,6 @@
         selectedDayIndex = 0;
       }
 
-      // Label Header Minggu
       const first = days[0];
       const last = days[6];
       document.getElementById("current-week-label").innerHTML = `🗓️ ${first.shortDate} – ${last.shortDate}`;
@@ -265,7 +363,6 @@
       }
     }
 
-    // Kira Status Slot (Available / Partial / Occupied)
     function calculateSlotStatus(slotInfo) {
       if (!slotInfo) {
         return { status: "green", freeCount: MEMBERS.length, murobbiFree: true };
@@ -278,17 +375,14 @@
         if (slotInfo[m.id] !== false) freeCount++;
       });
 
-      // Kak Nisa sibuk -> Occupied
       if (!isMurobbiFree) {
         return { status: "red", reason: "Kak Nisa Sibuk", freeCount, murobbiFree: false };
       }
 
-      // Semua ahli sibuk -> Occupied
       if (freeCount <= 1) {
         return { status: "red", reason: "Semua Sibuk", freeCount, murobbiFree: true };
       }
 
-      // Semua 6 orang lapang -> Available
       if (freeCount === MEMBERS.length) {
         return { status: "green", reason: "Available", freeCount, murobbiFree: true };
       }
@@ -297,31 +391,67 @@
     }
 
     // ==========================================
-    // RENDER 1: PAPARAN MOBILE (KAD HARIAN)
+    // RENDER: PAPARAN MOBILE
     // ==========================================
     function renderMobileView() {
-      // 1. Render Tab Hari
       const tabsContainer = document.getElementById("mobile-day-tabs");
       let tabsHTML = "";
+
       weekDays.forEach((day, idx) => {
         const isSelected = (idx === selectedDayIndex);
+        const dayEvent = dayEventsData[day.dateStr];
+        const eventColor = dayEvent ? COLOR_SCHEMES[dayEvent.color || 'purple'] : null;
+
+        let activeStyle = isSelected 
+          ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' 
+          : 'bg-white text-slate-700 border-slate-200/80 hover:bg-slate-50';
+
+        if (!isSelected && dayEvent) {
+          activeStyle = `${eventColor.tabBg} font-bold`;
+        }
+
         tabsHTML += `
           <button onclick="window.selectMobileDay(${idx})" 
-                  class="flex-shrink-0 flex flex-col items-center py-2 px-3.5 rounded-2xl border transition text-center cursor-pointer ${
-                    isSelected 
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' 
-                      : 'bg-white text-slate-700 border-slate-200/80 hover:bg-slate-50'
-                  }">
+                  class="flex-shrink-0 flex flex-col items-center py-2 px-3 rounded-2xl border transition text-center cursor-pointer min-w-[70px] ${activeStyle}">
             <span class="text-[10px] uppercase font-extrabold ${isSelected ? 'text-indigo-200' : 'text-slate-400'}">${day.dayName}</span>
             <span class="text-xs font-black mt-0.5">${day.shortDate}</span>
-            ${day.isToday ? `<span class="w-1.5 h-1.5 rounded-full mt-1 ${isSelected ? 'bg-amber-300' : 'bg-indigo-600'}"></span>` : ''}
+            
+            ${dayEvent ? `
+              <span class="text-[8px] px-1.5 py-0.2 rounded-full font-black mt-1 truncate max-w-[65px] ${isSelected ? 'bg-white/20 text-white' : eventColor.badge}">
+                ● ${dayEvent.title}
+              </span>
+            ` : (day.isToday ? `<span class="w-1.5 h-1.5 rounded-full mt-1.5 ${isSelected ? 'bg-amber-300' : 'bg-indigo-600'}"></span>` : '')}
           </button>
         `;
       });
       tabsContainer.innerHTML = tabsHTML;
 
-      // 2. Render 5 Waktu Bagi Hari Terpilih
+      // Banner Event untuk Hari ini
       const currentDay = weekDays[selectedDayIndex];
+      const banner = document.getElementById("day-event-banner");
+      const currentDayEvent = dayEventsData[currentDay.dateStr];
+
+      if (currentDayEvent) {
+        const theme = COLOR_SCHEMES[currentDayEvent.color || 'purple'];
+        banner.className = `p-3 rounded-2xl border flex items-center justify-between gap-2 shadow-xs mb-3 ${theme.banner}`;
+        banner.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-lg">📌</span>
+            <div>
+              <div class="text-[10px] uppercase tracking-wider font-extrabold opacity-90">Acara Khas: ${currentDay.dayName} (${currentDay.shortDate})</div>
+              <div class="text-sm font-black">${currentDayEvent.title}</div>
+            </div>
+          </div>
+          <button onclick="window.openDayEventModal()" class="text-[11px] font-black bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-xl cursor-pointer">
+            Edit
+          </button>
+        `;
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+
+      // Slot Waktu
       const slotsContainer = document.getElementById("mobile-slots-container");
       let slotsHTML = "";
 
@@ -329,6 +459,10 @@
         const slotKey = `${currentDay.dateStr}_${slot.id}`;
         const slotInfo = scheduleData[slotKey] || {};
         const result = calculateSlotStatus(slotInfo);
+        const notesObj = slotInfo.notes || {};
+
+        // Ambil senarai yang ada catatan
+        const notedMembers = MEMBERS.filter(m => notesObj[m.id] && notesObj[m.id].trim() !== "");
 
         let borderClass = "border-slate-200 bg-white";
         let statusBadge = "";
@@ -348,34 +482,54 @@
         let avatarsHTML = "";
         MEMBERS.forEach(m => {
           const isFree = slotInfo[m.id] !== false;
+          const hasNote = notesObj[m.id] && notesObj[m.id].trim() !== "";
           avatarsHTML += `
-            <span class="w-7 h-7 rounded-xl flex items-center justify-center text-xs border ${
-              isFree ? 'bg-white border-slate-200 shadow-2xs' : 'bg-rose-500 text-white border-rose-300 opacity-60'
-            }" title="${m.name}: ${isFree ? 'Free' : 'Sibuk'}">
-              ${m.emoji}
-            </span>
+            <div class="relative">
+              <span class="w-7 h-7 rounded-xl flex items-center justify-center text-xs border ${
+                isFree ? 'bg-white border-slate-200 shadow-2xs' : 'bg-rose-500 text-white border-rose-300 opacity-60'
+              }" title="${m.name}: ${isFree ? 'Free' : 'Sibuk'}">
+                ${m.emoji}
+              </span>
+              ${hasNote ? '<span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-indigo-600 rounded-full border border-white"></span>' : ''}
+            </div>
           `;
         });
 
+        // Paparan Ringkas Nota jika ada
+        let notesPreviewHTML = "";
+        if (notedMembers.length > 0) {
+          notesPreviewHTML = `
+            <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex flex-wrap gap-1">
+              ${notedMembers.map(m => `
+                <span class="text-[10px] bg-white/80 border border-slate-200/80 px-2 py-0.5 rounded-lg text-slate-700 font-medium">
+                  <strong>${m.name}:</strong> "${notesObj[m.id]}"
+                </span>
+              `).join('')}
+            </div>
+          `;
+        }
+
         slotsHTML += `
           <div onclick="window.openDetail('${slotKey}', '${currentDay.dayName}', '${currentDay.shortDate}', '${slot.label}', '${slot.emoji}')"
-               class="p-4 rounded-2xl border ${borderClass} shadow-xs active:scale-[0.99] transition cursor-pointer flex items-center justify-between gap-3">
-            <div>
+               class="p-3.5 rounded-2xl border ${borderClass} shadow-xs active:scale-[0.99] transition cursor-pointer">
+            <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
                 <span class="text-xl">${slot.emoji}</span>
-                <span class="text-base font-black text-slate-900">${slot.label}</span>
+                <span class="text-sm sm:text-base font-black text-slate-900">${slot.label}</span>
               </div>
-              <div class="flex items-center gap-1 mt-2.5">
-                ${avatarsHTML}
-              </div>
+              <div>${statusBadge}</div>
             </div>
 
-            <div class="flex flex-col items-end gap-1.5">
-              ${statusBadge}
+            <div class="flex items-center justify-between mt-2 pt-1">
+              <div class="flex items-center gap-1">
+                ${avatarsHTML}
+              </div>
               <span class="text-[11px] font-bold text-indigo-600 flex items-center gap-0.5">
-                Pilih <i class="ph ph-caret-right font-bold"></i>
+                Set <i class="ph ph-caret-right font-bold"></i>
               </span>
             </div>
+
+            ${notesPreviewHTML}
           </div>
         `;
       });
@@ -389,7 +543,7 @@
     };
 
     // ==========================================
-    // RENDER 2: PAPARAN JADUAL PENUH (GRID)
+    // RENDER: JADUAL PENUH (GRID)
     // ==========================================
     function renderCalendarGrid() {
       const headerContainer = document.getElementById("grid-header");
@@ -400,9 +554,10 @@
       `;
 
       weekDays.forEach(day => {
+        const dayEvent = dayEventsData[day.dateStr];
         headerHTML += `
-          <div class="p-2.5 flex flex-col items-center justify-center relative ${day.isToday ? 'bg-indigo-50/80 text-indigo-950 font-extrabold' : ''}">
-            ${day.isToday ? '<span class="text-[8px] font-black uppercase bg-indigo-600 text-white px-1.5 rounded-full mb-0.5">Hari Ini</span>' : ''}
+          <div class="p-2 flex flex-col items-center justify-center relative ${day.isToday ? 'bg-indigo-50/80 text-indigo-950 font-extrabold' : ''}">
+            ${dayEvent ? `<span class="text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full mb-1 text-center truncate max-w-[85px] ${COLOR_SCHEMES[dayEvent.color || 'purple'].badge}">📌 ${dayEvent.title}</span>` : ''}
             <span class="text-xs uppercase tracking-wider ${day.isWeekend ? 'text-indigo-600 font-black' : 'text-slate-700'}">${day.dayName}</span>
             <span class="text-[11px] font-medium text-slate-400">${day.shortDate}</span>
           </div>
@@ -418,9 +573,9 @@
         row.className = "grid grid-cols-8 divide-x divide-slate-100 items-stretch";
 
         let rowHTML = `
-          <div class="p-3 bg-slate-50/70 flex flex-col justify-center items-center text-center">
+          <div class="p-2.5 bg-slate-50/70 flex flex-col justify-center items-center text-center">
             <span class="text-xl">${slot.emoji}</span>
-            <span class="text-xs font-black text-slate-800 mt-1 uppercase">${slot.label}</span>
+            <span class="text-xs font-black text-slate-800 mt-0.5 uppercase">${slot.label}</span>
           </div>
         `;
 
@@ -428,13 +583,14 @@
           const slotKey = `${day.dateStr}_${slot.id}`;
           const slotInfo = scheduleData[slotKey] || {};
           const result = calculateSlotStatus(slotInfo);
+          const hasNotes = slotInfo.notes && Object.values(slotInfo.notes).some(v => v && v.trim() !== "");
 
           let cellClass = "bg-white";
           let badgeHTML = "";
 
           if (result.status === "green") {
             cellClass = "bg-emerald-50/50";
-            badgeHTML = `<span class="text-[10px] font-black text-emerald-800 bg-white/95 px-1.5 py-0.5 rounded-md">🟢 Available</span>`;
+            badgeHTML = `<span class="text-[10px] font-black text-emerald-800 bg-white/95 px-1.5 py-0.5 rounded-md">🟢 Free</span>`;
           } else if (result.status === "yellow") {
             cellClass = "bg-amber-50/50";
             badgeHTML = `<span class="text-[10px] font-black text-amber-800 bg-white/95 px-1.5 py-0.5 rounded-md">🟡 ${result.freeCount}/${MEMBERS.length}</span>`;
@@ -445,10 +601,13 @@
 
           rowHTML += `
             <div onclick="window.openDetail('${slotKey}', '${day.dayName}', '${day.shortDate}', '${slot.label}', '${slot.emoji}')"
-                 class="p-2 min-h-[95px] cursor-pointer hover:bg-slate-100/80 transition flex flex-col justify-between items-center text-center ${cellClass}">
-               <span class="text-[9px] font-bold text-slate-400 uppercase">${slot.label}</span>
+                 class="p-2 min-h-[90px] cursor-pointer hover:bg-slate-100/80 transition flex flex-col justify-between items-center text-center ${cellClass}">
+               <div class="flex items-center gap-1">
+                 <span class="text-[9px] font-bold text-slate-400 uppercase">${slot.label}</span>
+                 ${hasNotes ? '<i class="ph ph-chat-circle-text text-indigo-600 font-bold" title="Ada nota"></i>' : ''}
+               </div>
                <div class="my-auto">${badgeHTML}</div>
-               <span class="text-[9px] font-bold text-indigo-600">Tekan</span>
+               <span class="text-[9px] font-bold text-indigo-600">Edit</span>
             </div>
           `;
         });
@@ -458,7 +617,7 @@
       });
     }
 
-    // Tukar Mod Paparan (Telefon / Jadual)
+    // Tukar Mod Paparan
     window.setViewMode = function(mode) {
       viewMode = mode;
       const mobileContainer = document.getElementById("mobile-view-container");
@@ -481,7 +640,9 @@
       }
     };
 
-    // Modal Status Interaktif
+    // ==========================================
+    // MODAL: STATUS & NOTA INDIVIDU
+    // ==========================================
     window.openDetail = function(slotKey, dayName, shortDate, slotLabel, slotEmoji) {
       activeSlotKey = slotKey;
       activeSlotMeta = { dayName, shortDate, slotLabel, slotEmoji };
@@ -493,42 +654,58 @@
       listContainer.innerHTML = "";
 
       const currentSlot = scheduleData[slotKey] || {};
+      const currentNotes = currentSlot.notes || {};
 
       MEMBERS.forEach(member => {
         const isFree = currentSlot[member.id] !== false;
+        const noteVal = currentNotes[member.id] || "";
+
         const item = document.createElement("div");
-        item.className = `flex items-center justify-between p-3 rounded-2xl border transition-all duration-150 ${
-          isFree ? "bg-emerald-50/70 border-emerald-200 text-emerald-950" : "bg-rose-50/80 border-rose-200 text-rose-950"
+        item.className = `p-3 rounded-2xl border transition-all duration-150 ${
+          isFree ? "bg-emerald-50/60 border-emerald-200" : "bg-rose-50/70 border-rose-200"
         }`;
 
         item.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="w-9 h-9 rounded-xl flex items-center justify-center text-base ${
-              member.isMurobbi ? "bg-amber-100 border border-amber-300 shadow-2xs" : "bg-white border border-slate-200"
-            }">
-              ${member.emoji}
-            </span>
-            <div>
-              <div class="text-xs font-black flex items-center gap-1">
-                ${member.name}
-                ${member.isMurobbi ? '<span class="text-[8px] bg-rose-600 text-white font-black px-1.5 py-0.2 rounded-sm uppercase">Murobbi</span>' : ''}
-              </div>
-              <span class="text-[11px] font-semibold ${isFree ? 'text-emerald-700' : 'text-rose-600'}">
-                ${isFree ? "🟢 Free" : "🔴 Sibuk"}
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center text-sm ${
+                member.isMurobbi ? "bg-amber-100 border border-amber-300" : "bg-white border border-slate-200"
+              }">
+                ${member.emoji}
               </span>
+              <div>
+                <div class="text-xs font-black flex items-center gap-1 text-slate-900">
+                  ${member.name}
+                  ${member.isMurobbi ? '<span class="text-[8px] bg-rose-600 text-white font-black px-1.5 py-0.2 rounded-sm uppercase">Murobbi</span>' : ''}
+                </div>
+                <span class="text-[10px] font-bold ${isFree ? 'text-emerald-700' : 'text-rose-600'}">
+                  ${isFree ? "🟢 Free" : "🔴 Sibuk"}
+                </span>
+              </div>
             </div>
+
+            <!-- Switch Status -->
+            <button onclick="window.toggleStatus('${member.id}', ${!isFree})" 
+                    class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                      isFree ? 'bg-emerald-500' : 'bg-rose-500'
+                    }">
+              <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out flex items-center justify-center text-[9px] ${
+                isFree ? 'translate-x-5' : 'translate-x-0'
+              }">
+                ${isFree ? '✔️' : '✖️'}
+              </span>
+            </button>
           </div>
 
-          <button onclick="window.toggleStatus('${member.id}', ${!isFree})" 
-                  class="relative inline-flex h-7 w-13 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                    isFree ? 'bg-emerald-500' : 'bg-rose-500'
-                  }">
-            <span class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out flex items-center justify-center text-[10px] ${
-              isFree ? 'translate-x-6' : 'translate-x-0'
-            }">
-              ${isFree ? '✔️' : '✖️'}
-            </span>
-          </button>
+          <!-- Input Nota Ahli -->
+          <div class="mt-2 pt-2 border-t ${isFree ? 'border-emerald-100' : 'border-rose-100'} flex items-center gap-1.5">
+            <i class="ph ph-note-pencil text-xs text-slate-400"></i>
+            <input type="text" 
+                   value="${noteVal}" 
+                   placeholder="Catatan individu (cth: Ada kelas, bertugas)..." 
+                   onchange="window.saveMemberNote('${member.id}', this.value)"
+                   class="w-full text-[11px] bg-white/90 px-2.5 py-1 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-slate-700">
+          </div>
         `;
 
         listContainer.appendChild(item);
@@ -541,14 +718,14 @@
       document.getElementById("detail-modal").classList.add("hidden");
     };
 
-    // Toggle Realtime Firebase
+    // Tukar Status Lapang / Sibuk
     window.toggleStatus = async function(memberId, newStatus) {
       if (!scheduleData[activeSlotKey]) scheduleData[activeSlotKey] = {};
       scheduleData[activeSlotKey][memberId] = newStatus;
 
       try {
-        const slotRef = ref(db, "weekly_schedule/" + activeSlotKey);
-        await set(slotRef, scheduleData[activeSlotKey]);
+        const slotRef = ref(db, `weekly_schedule/${activeSlotKey}/${memberId}`);
+        await set(slotRef, newStatus);
 
         if (activeSlotMeta) {
           window.openDetail(
@@ -560,31 +737,192 @@
           );
         }
       } catch (err) {
-        console.error("Gagal simpan ke Firebase:", err);
+        console.error("Gagal simpan status:", err);
       }
     };
 
-    // Dengar perubahan masa nyata
+    // Simpan Catatan Individu
+    window.saveMemberNote = async function(memberId, noteText) {
+      if (!scheduleData[activeSlotKey]) scheduleData[activeSlotKey] = {};
+      if (!scheduleData[activeSlotKey].notes) scheduleData[activeSlotKey].notes = {};
+      
+      scheduleData[activeSlotKey].notes[memberId] = noteText.trim();
+
+      try {
+        const noteRef = ref(db, `weekly_schedule/${activeSlotKey}/notes/${memberId}`);
+        await set(noteRef, noteText.trim());
+      } catch (err) {
+        console.error("Gagal simpan nota:", err);
+      }
+    };
+
+    // ==========================================
+    // MODAL: EVENT HARI
+    // ==========================================
+    window.openDayEventModal = function() {
+      const currentDay = weekDays[selectedDayIndex];
+      document.getElementById("event-modal-day-label").innerText = `Untuk hari: ${currentDay.dayName}, ${currentDay.shortDate}`;
+      
+      const existing = dayEventsData[currentDay.dateStr] || {};
+      document.getElementById("event-input-title").value = existing.title || "";
+      
+      const radios = document.getElementsByName("event-color");
+      radios.forEach(r => {
+        r.checked = (r.value === (existing.color || "purple"));
+      });
+
+      document.getElementById("event-modal").classList.remove("hidden");
+    };
+
+    window.closeEventModal = function() {
+      document.getElementById("event-modal").classList.add("hidden");
+    };
+
+    window.saveDayEvent = async function() {
+      const currentDay = weekDays[selectedDayIndex];
+      const title = document.getElementById("event-input-title").value.trim();
+      const color = document.querySelector('input[name="event-color"]:checked')?.value || "purple";
+
+      if (!title) {
+        alert("Sila masukkan nama acara atau program.");
+        return;
+      }
+
+      try {
+        const eventRef = ref(db, `day_events/${currentDay.dateStr}`);
+        await set(eventRef, {
+          title: title,
+          color: color,
+          updatedAt: new Date().toISOString()
+        });
+        window.closeEventModal();
+      } catch (e) {
+        console.error("Gagal simpan event:", e);
+      }
+    };
+
+    window.deleteDayEvent = async function() {
+      const currentDay = weekDays[selectedDayIndex];
+      try {
+        const eventRef = ref(db, `day_events/${currentDay.dateStr}`);
+        await remove(eventRef);
+        window.closeEventModal();
+      } catch (e) {
+        console.error("Gagal padam event:", e);
+      }
+    };
+
+    // ==========================================
+    // INTEGRASI WHATSAPP GROUP
+    // ==========================================
+    window.shareToWhatsApp = function() {
+      const first = weekDays[0];
+      const last = weekDays[6];
+
+      let text = `🌸 *SLOT IN WITH MUROBBI - JADUAL HALAQAH* 🌸\n`;
+      text += `🗓 *Minggu:* ${first.shortDate} – ${last.shortDate}\n\n`;
+
+      // 1. Acara Khas Minggu Ini
+      let hasEvents = false;
+      let eventText = `📌 *ACARA / EVENT KHAS:*\n`;
+      weekDays.forEach(d => {
+        if (dayEventsData[d.dateStr]) {
+          hasEvents = true;
+          eventText += `• *${d.dayName} (${d.shortDate}):* ${dayEventsData[d.dateStr].title}\n`;
+        }
+      });
+      if (hasEvents) {
+        text += eventText + `\n`;
+      }
+
+      // 2. Slot Lapang (Available / Semua Free)
+      text += `🟢 *CADANGAN WAKTU TERBAIK (Semua Lapang):*\n`;
+      let availableCount = 0;
+
+      weekDays.forEach(d => {
+        let dayAvailableSlots = [];
+        SLOTS.forEach(s => {
+          const key = `${d.dateStr}_${s.id}`;
+          const res = calculateSlotStatus(scheduleData[key] || {});
+          if (res.status === "green") {
+            dayAvailableSlots.push(s.label);
+            availableCount++;
+          }
+        });
+
+        if (dayAvailableSlots.length > 0) {
+          text += `• *${d.dayName}*: ${dayAvailableSlots.join(", ")}\n`;
+        }
+      });
+
+      if (availableCount === 0) {
+        text += `_(Tiada slot 100% lapang minggu ini, periksa slot kuning di sistem)_\n`;
+      }
+
+      // 3. Catatan Individu
+      let notesSummary = "";
+      weekDays.forEach(d => {
+        SLOTS.forEach(s => {
+          const key = `${d.dateStr}_${s.id}`;
+          const slot = scheduleData[key];
+          if (slot && slot.notes) {
+            Object.entries(slot.notes).forEach(([mId, note]) => {
+              if (note && note.trim()) {
+                const member = MEMBERS.find(m => m.id === mId);
+                const name = member ? member.name : mId;
+                notesSummary += `• ${name} (${d.dayName} - ${s.label}): "${note.trim()}"\n`;
+              }
+            });
+          }
+        });
+      });
+
+      if (notesSummary) {
+        text += `\n📝 *CATATAN / URUSAN AHLI:*\n` + notesSummary;
+      }
+
+      text += `\n🔗 *Kemaskini jadual di app:* ${window.location.href}`;
+
+      const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(whatsappURL, "_blank");
+    };
+
+    // ==========================================
+    // REALTIME DATABASE LISTENER
+    // ==========================================
     function listenToDatabase() {
+      // Dengar jadual slot & nota
       const scheduleRef = ref(db, "weekly_schedule");
       onValue(scheduleRef, (snapshot) => {
         scheduleData = snapshot.val() || {};
-        if (viewMode === 'mobile') {
-          renderMobileView();
-        } else {
-          renderCalendarGrid();
-        }
-
-        if (activeSlotKey && !document.getElementById("detail-modal").classList.contains("hidden")) {
-          window.openDetail(
-            activeSlotKey, 
-            activeSlotMeta.dayName, 
-            activeSlotMeta.shortDate, 
-            activeSlotMeta.slotLabel, 
-            activeSlotMeta.slotEmoji
-          );
-        }
+        refreshUI();
       });
+
+      // Dengar acara/event harian
+      const eventsRef = ref(db, "day_events");
+      onValue(eventsRef, (snapshot) => {
+        dayEventsData = snapshot.val() || {};
+        refreshUI();
+      });
+    }
+
+    function refreshUI() {
+      if (viewMode === 'mobile') {
+        renderMobileView();
+      } else {
+        renderCalendarGrid();
+      }
+
+      // Kemaskini modal jika sedang dibuka
+      if (activeSlotKey && !document.getElementById("detail-modal").classList.contains("hidden")) {
+        window.openDetail(
+          activeSlotKey, 
+          activeSlotMeta.dayName, 
+          activeSlotMeta.shortDate, 
+          activeSlotMeta.slotLabel, 
+          activeSlotMeta.slotEmoji
+        );
+      }
     }
 
     window.changeWeek = function(delta) {
@@ -599,14 +937,10 @@
 
     function initView() {
       calculateWeekDates();
-      if (viewMode === 'mobile') {
-        renderMobileView();
-      } else {
-        renderCalendarGrid();
-      }
+      refreshUI();
     }
 
-    // Mulakan paparan
+    // Mulakan
     initView();
     listenToDatabase();
   </script>
