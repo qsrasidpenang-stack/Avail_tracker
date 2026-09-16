@@ -874,30 +874,31 @@
 
       // Maklumat Acara & Waktu
       let hasEvents = false;
-      let eventText = `📌 *MAKLUMAN PROGRAM & WAKTU BERKUMPUL:*\n\n`;
-      
-      weekDays.forEach(d => {
-        const ev = dayEventsData[d.dateStr];
-        if (ev) {
-          hasEvents = true;
-          const gatherVal = ev.gatherTime || ev.meetTime;
-          eventText += `🗓️ *${d.dayName} (${d.shortDate})*\n`;
-          eventText += `   📖 *Acara:* ${ev.title}\n`;
-          if (gatherVal) {
-            eventText += `   ⏰ *Masa Berkumpul:* ${gatherVal}\n`;
-          }
-          if (ev.togetherTime) {
-            eventText += `   👥 *Masa Bersama:* ${ev.togetherTime}\n`;
-          }
-          eventText += `\n`;
-        }
-      });
+      // Gantikan bahagian ini dalam window.shareToWhatsApp:
+let eventText = `📌 *AGENDA & WAKTU BERKUMPUL:*\n\n`;
 
-      if (hasEvents) {
-        text += eventText;
-      } else {
-        text += `📌 *STATUS MINGGU INI:*\n_Belum ada acara rasmi ditetapkan untuk minggu ini._\n\n`;
-      }
+weekDays.forEach(d => {
+  const ev = dayEventsData[d.dateStr];
+  if (ev) {
+    hasEvents = true;
+    const gatherVal = ev.gatherTime || ev.meetTime;
+    eventText += `🗓️ *${d.dayName} (${d.shortDate})*\n`;
+    eventText += `   📖 *Agenda:* ${ev.title}\n`;
+    if (gatherVal) {
+      eventText += `   ⏰ *Masa Berkumpul:* ${gatherVal}\n`;
+    }
+    if (ev.togetherTime) {
+      eventText += `   👥 *Masa Semua Berada Bersama:* ${ev.togetherTime}\n`;
+    }
+    eventText += `\n`;
+  }
+});
+
+if (hasEvents) {
+  text += eventText;
+} else {
+  text += `📌 *AGENDA MINGGU INI:*\n_Tiada agenda rasmi ditetapkan setakat ini._\n\n`;
+}
 
       // Catatan Ahli Halaqah (jika ada)
       let notesSummary = "";
