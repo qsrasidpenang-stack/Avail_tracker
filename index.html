@@ -46,7 +46,7 @@
 
       <!-- WhatsApp Share & View Toggles -->
       <div class="flex items-center gap-1.5">
-        <button onclick="shareToWhatsApp()" class="h-8 px-2.5 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer" title="Kongsi Jadual ke WhatsApp">
+        <button onclick="shareToWhatsApp()" class="h-8 px-2.5 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer" title="Kongsi Maklumat ke WhatsApp">
           <i class="ph ph-whatsapp-logo text-base"></i>
           <span class="hidden sm:inline">WhatsApp</span>
         </button>
@@ -113,7 +113,7 @@
       <!-- Tab Pemilihan Hari -->
       <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-2" id="mobile-day-tabs"></div>
 
-      <!-- Banner Event Hari & Waktu Jumpa Jika Ada -->
+      <!-- Banner Event Hari & Waktu Jumpa -->
       <div id="day-event-banner" class="hidden mb-3"></div>
 
       <!-- Kad Waktu bagi Hari Terpilih -->
@@ -168,7 +168,7 @@
   <!-- MODAL: SET ACARA / EVENT HARI & WAKTU JUMPA -->
   <!-- ============================================== -->
   <div id="event-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs hidden flex items-end sm:items-center justify-center z-50">
-    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 relative border border-slate-100">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
       <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-3 sm:hidden"></div>
       
       <div class="flex items-center justify-between mb-4">
@@ -191,12 +191,21 @@
                  class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
         </div>
 
-        <!-- WAKTU BERKUMPUL / BERJUMPA -->
+        <!-- 1. MASA BERKUMPUL -->
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
-            <i class="ph ph-clock font-bold text-indigo-600"></i> Waktu Berkumpul / Berjumpa
+            <i class="ph ph-clock font-bold text-indigo-600"></i> Masa Berkumpul:
           </label>
-          <input type="text" id="event-input-time" placeholder="Contoh: 8:30 Malam / Selepas Isyak / 5.00 PM" 
+          <input type="text" id="event-input-gather-time" placeholder="Contoh: 8:00 Malam / Selepas Isyak" 
+                 class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+        </div>
+
+        <!-- 2. MASA SEMUA BERADA BERSAMA -->
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+            <i class="ph ph-users-three font-bold text-indigo-600"></i> Masa Semua Berada Bersama:
+          </label>
+          <input type="text" id="event-input-together-time" placeholder="Contoh: 8:30 Malam – 10:30 Malam" 
                  class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
         </div>
 
@@ -233,7 +242,7 @@
 
         <div class="flex gap-2 pt-2">
           <button onclick="saveDayEvent()" class="flex-1 py-2.5 bg-indigo-600 active:bg-indigo-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-xs">
-            💾 Simpan Event & Masa
+            💾 Simpan Maklumat
           </button>
           <button onclick="deleteDayEvent()" class="px-3 py-2.5 bg-rose-50 text-rose-600 active:bg-rose-100 font-bold rounded-xl text-xs transition border border-rose-200 cursor-pointer">
             Padam
@@ -437,30 +446,38 @@
       });
       tabsContainer.innerHTML = tabsHTML;
 
-      // Banner Event & Waktu Jumpa untuk Hari ini
+      // Banner Event: Masa Berkumpul & Masa Semua Berada Bersama
       const currentDay = weekDays[selectedDayIndex];
       const banner = document.getElementById("day-event-banner");
       const currentDayEvent = dayEventsData[currentDay.dateStr];
 
       if (currentDayEvent) {
         const theme = COLOR_SCHEMES[currentDayEvent.color || 'purple'];
-        banner.className = `p-3 rounded-2xl border flex items-center justify-between gap-2 shadow-xs mb-3 ${theme.banner}`;
+        const gatherTimeVal = currentDayEvent.gatherTime || currentDayEvent.meetTime || '';
+        const togetherTimeVal = currentDayEvent.togetherTime || '';
+
+        banner.className = `p-3 rounded-2xl border flex items-start justify-between gap-2 shadow-xs mb-3 ${theme.banner}`;
         banner.innerHTML = `
-          <div class="flex items-center gap-2.5">
-            <span class="text-2xl">📌</span>
+          <div class="flex items-start gap-2.5">
+            <span class="text-2xl mt-0.5">📌</span>
             <div>
-              <div class="text-[10px] uppercase tracking-wider font-extrabold opacity-90">Acara Khas: ${currentDay.dayName} (${currentDay.shortDate})</div>
-              <div class="text-sm font-black flex items-center gap-2 flex-wrap">
-                <span>${currentDayEvent.title}</span>
-                ${currentDayEvent.meetTime ? `
-                  <span class="bg-white/25 text-white text-[11px] px-2 py-0.5 rounded-md font-extrabold flex items-center gap-1">
-                    ⏰ ${currentDayEvent.meetTime}
-                  </span>
+              <div class="text-[10px] uppercase tracking-wider font-extrabold opacity-90">Ketetapan Acara: ${currentDay.dayName} (${currentDay.shortDate})</div>
+              <div class="text-sm font-black mt-0.5">${currentDayEvent.title}</div>
+              <div class="mt-1.5 space-y-1">
+                ${gatherTimeVal ? `
+                  <div class="text-[11px] font-semibold flex items-center gap-1.5 bg-white/20 px-2 py-0.5 rounded-md inline-flex mr-1">
+                    <span>⏰ <b>Masa Berkumpul:</b> ${gatherTimeVal}</span>
+                  </div>
+                ` : ''}
+                ${togetherTimeVal ? `
+                  <div class="text-[11px] font-semibold flex items-center gap-1.5 bg-white/20 px-2 py-0.5 rounded-md inline-flex">
+                    <span>👥 <b>Masa Bersama:</b> ${togetherTimeVal}</span>
+                  </div>
                 ` : ''}
               </div>
             </div>
           </div>
-          <button onclick="window.openDayEventModal()" class="text-[11px] font-black bg-white/20 hover:bg-white/30 px-2.5 py-1.5 rounded-xl cursor-pointer">
+          <button onclick="window.openDayEventModal()" class="text-[11px] font-black bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-xl cursor-pointer">
             Edit
           </button>
         `;
@@ -572,16 +589,20 @@
 
       weekDays.forEach(day => {
         const dayEvent = dayEventsData[day.dateStr];
+        const gatherTimeVal = dayEvent ? (dayEvent.gatherTime || dayEvent.meetTime || '') : '';
+        const togetherTimeVal = dayEvent ? (dayEvent.togetherTime || '') : '';
+
         headerHTML += `
           <div class="p-2 flex flex-col items-center justify-center relative ${day.isToday ? 'bg-indigo-50/80 text-indigo-950 font-extrabold' : ''}">
             ${dayEvent ? `
-              <span class="text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full mb-1 text-center truncate max-w-[85px] ${COLOR_SCHEMES[dayEvent.color || 'purple'].badge}" title="${dayEvent.title} ${dayEvent.meetTime ? '(' + dayEvent.meetTime + ')' : ''}">
+              <span class="text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full mb-1 text-center truncate max-w-[85px] ${COLOR_SCHEMES[dayEvent.color || 'purple'].badge}" title="${dayEvent.title}">
                 📌 ${dayEvent.title}
               </span>
             ` : ''}
             <span class="text-xs uppercase tracking-wider ${day.isWeekend ? 'text-indigo-600 font-black' : 'text-slate-700'}">${day.dayName}</span>
             <span class="text-[11px] font-medium text-slate-400">${day.shortDate}</span>
-            ${dayEvent && dayEvent.meetTime ? `<span class="text-[8px] font-black text-indigo-700 mt-0.5">⏰ ${dayEvent.meetTime}</span>` : ''}
+            ${gatherTimeVal ? `<span class="text-[8px] font-bold text-indigo-700 mt-0.5">⏰ ${gatherTimeVal}</span>` : ''}
+            ${togetherTimeVal ? `<span class="text-[8px] font-medium text-slate-500">👥 ${togetherTimeVal}</span>` : ''}
           </div>
         `;
       });
@@ -779,7 +800,7 @@
     };
 
     // ==========================================
-    // MODAL: EVENT HARI & WAKTU JUMPA
+    // MODAL: EVENT HARI & WAKTU
     // ==========================================
     window.openDayEventModal = function() {
       const currentDay = weekDays[selectedDayIndex];
@@ -787,7 +808,8 @@
       
       const existing = dayEventsData[currentDay.dateStr] || {};
       document.getElementById("event-input-title").value = existing.title || "";
-      document.getElementById("event-input-time").value = existing.meetTime || "";
+      document.getElementById("event-input-gather-time").value = existing.gatherTime || existing.meetTime || "";
+      document.getElementById("event-input-together-time").value = existing.togetherTime || "";
       
       const radios = document.getElementsByName("event-color");
       radios.forEach(r => {
@@ -804,7 +826,8 @@
     window.saveDayEvent = async function() {
       const currentDay = weekDays[selectedDayIndex];
       const title = document.getElementById("event-input-title").value.trim();
-      const meetTime = document.getElementById("event-input-time").value.trim();
+      const gatherTime = document.getElementById("event-input-gather-time").value.trim();
+      const togetherTime = document.getElementById("event-input-together-time").value.trim();
       const color = document.querySelector('input[name="event-color"]:checked')?.value || "purple";
 
       if (!title) {
@@ -816,7 +839,8 @@
         const eventRef = ref(db, `day_events/${currentDay.dateStr}`);
         await set(eventRef, {
           title: title,
-          meetTime: meetTime,
+          gatherTime: gatherTime,
+          togetherTime: togetherTime,
           color: color,
           updatedAt: new Date().toISOString()
         });
@@ -838,55 +862,44 @@
     };
 
     // ==========================================
-    // INTEGRASI WHATSAPP GROUP
+    // INTEGRASI WHATSAPP GROUP (KEMAS & MUDAH DIBACA)
     // ==========================================
     window.shareToWhatsApp = function() {
       const first = weekDays[0];
       const last = weekDays[6];
 
-      let text = `🌸 *SLOT IN WITH MUROBBI - JADUAL HALAQAH* 🌸\n`;
-      text += `🗓 *Minggu:* ${first.shortDate} – ${last.shortDate}\n\n`;
+      let text = `✨ *SLOT IN WITH MUROBBI - JADUAL HALAQAH* ✨\n`;
+      text += `📅 *Minggu:* ${first.shortDate} – ${last.shortDate}\n`;
+      text += `───────────────────────\n\n`;
 
-      // 1. Acara Khas & Waktu Berkumpul Minggu Ini
+      // Maklumat Acara & Waktu
       let hasEvents = false;
-      let eventText = `📌 *AGENDA & WAKTU BERKUMPUL:*\n`;
+      let eventText = `📌 *MAKLUMAN PROGRAM & WAKTU BERKUMPUL:*\n\n`;
+      
       weekDays.forEach(d => {
         const ev = dayEventsData[d.dateStr];
         if (ev) {
           hasEvents = true;
-          const timeDetails = ev.meetTime ? ` (⏰ *Berkumpul:* ${ev.meetTime})` : '';
-          eventText += `• *${d.dayName} (${d.shortDate}):* ${ev.title}${timeDetails}\n`;
-        }
-      });
-      if (hasEvents) {
-        text += eventText + `\n`;
-      }
-
-      // 2. Slot Lapang (Available / Semua Free)
-      text += `🟢 *CADANGAN WAKTU TERBAIK (Semua Lapang):*\n`;
-      let availableCount = 0;
-
-      weekDays.forEach(d => {
-        let dayAvailableSlots = [];
-        SLOTS.forEach(s => {
-          const key = `${d.dateStr}_${s.id}`;
-          const res = calculateSlotStatus(scheduleData[key] || {});
-          if (res.status === "green") {
-            dayAvailableSlots.push(s.label);
-            availableCount++;
+          const gatherVal = ev.gatherTime || ev.meetTime;
+          eventText += `🗓️ *${d.dayName} (${d.shortDate})*\n`;
+          eventText += `   📖 *Acara:* ${ev.title}\n`;
+          if (gatherVal) {
+            eventText += `   ⏰ *Masa Berkumpul:* ${gatherVal}\n`;
           }
-        });
-
-        if (dayAvailableSlots.length > 0) {
-          text += `• *${d.dayName}*: ${dayAvailableSlots.join(", ")}\n`;
+          if (ev.togetherTime) {
+            eventText += `   👥 *Masa Bersama:* ${ev.togetherTime}\n`;
+          }
+          eventText += `\n`;
         }
       });
 
-      if (availableCount === 0) {
-        text += `_(Tiada slot 100% lapang minggu ini, sila rujuk sistem untuk slot separuh free)_\n`;
+      if (hasEvents) {
+        text += eventText;
+      } else {
+        text += `📌 *STATUS MINGGU INI:*\n_Belum ada acara rasmi ditetapkan untuk minggu ini._\n\n`;
       }
 
-      // 3. Catatan Individu
+      // Catatan Ahli Halaqah (jika ada)
       let notesSummary = "";
       weekDays.forEach(d => {
         SLOTS.forEach(s => {
@@ -897,7 +910,7 @@
               if (note && note.trim()) {
                 const member = MEMBERS.find(m => m.id === mId);
                 const name = member ? member.name : mId;
-                notesSummary += `• ${name} (${d.dayName} - ${s.label}): "${note.trim()}"\n`;
+                notesSummary += `• *${name}* (${d.dayName} - ${s.label}): _"${note.trim()}"_\n`;
               }
             });
           }
@@ -905,10 +918,11 @@
       });
 
       if (notesSummary) {
-        text += `\n📝 *CATATAN / URUSAN AHLI:*\n` + notesSummary;
+        text += `📝 *CATATAN / URUSAN AHLI:*\n` + notesSummary + `\n`;
       }
 
-      text += `\n🔗 *Kemaskini jadual di app:* ${window.location.href}`;
+      text += `───────────────────────\n`;
+      text += `📲 *Semak & Kemaskini Kehadiran Anda:* \n${window.location.href}`;
 
       const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
       window.open(whatsappURL, "_blank");
@@ -964,7 +978,7 @@
       refreshUI();
     }
 
-    // Mulakan
+    // Mulakan Aplikasi
     initView();
     listenToDatabase();
   </script>
